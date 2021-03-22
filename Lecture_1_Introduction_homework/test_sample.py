@@ -16,7 +16,7 @@ def test_string_length(test_string, result):
 
 
 def remove_spaces(test_string):
-    return "".join(test_string.split())
+    return test_string.strip()
 
 
 @pytest.mark.parametrize("test_string,result", [("test", "test"), ("\ttab", "tab"), ("  whitespace ", "whitespace")])
