@@ -21,4 +21,7 @@ from typing import List, Tuple
 
 
 def major_and_minor_elem(inp: List) -> Tuple[int, int]:
-    ...
+    inp_set = set(inp)
+    major = max(inp_set, key=lambda x: inp.count(x))
+    minor = min(inp_set, key=lambda x: inp.count(x))
+    return major, minor

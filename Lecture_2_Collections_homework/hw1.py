@@ -29,15 +29,25 @@ foo@example.com 729.83 EUR accountName 2021-01:0 validate_date
 bar@example.com 729.83 accountName 2021-01-02 validate_line
 """
 from typing import Callable, Iterable
+import re
 
 
 def validate_line(line: str) -> bool:
-    ...
+    return len(line.split()) == 5
 
 
 def validate_date(date: str) -> bool:
-    ...
+    regexp = re.compile(r'.*\d{4}-\d{2}-\d{2}$')
+    return bool(regexp.match(date))
 
 
 def check_data(filepath: str, validators: Iterable[Callable]) -> str:
-    ...
+    filepath_out = "results.txt"
+    with open(filepath, mode="r") as file_input, open(filepath_out, mode="w") as file_output:
+        for line in file_input:
+            for validator in validators:
+                is_valid = validator(line.rstrip())
+                if not is_valid:
+                    file_output.write("{} {}\n".format(line.rstrip(), validator.__name__))
+                    break
+    return filepath_out
