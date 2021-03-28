@@ -28,5 +28,4 @@ assert = custom_range(string.ascii_lowercase, 'p', 'g', -2) == ['p', 'n', 'l', '
 
 def custom_range(sequence, *args):
     args_with_codes = [arg if isinstance(arg, int) else ord(arg) for arg in args]
-    all_range_symbols = [chr(i) for i in range(*args_with_codes)]
-    return [ch for ch in all_range_symbols if ch in sequence]
+    return [chr(i) for i in range(*args_with_codes) if chr(i) in sequence]

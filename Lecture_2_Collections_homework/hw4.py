@@ -20,4 +20,5 @@ def cache(func: Callable) -> Callable:
         if args not in cache_dict:
             cache_dict[args] = func(*args)
         return cache_dict[args]
+
     return save_to_cache
