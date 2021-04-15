@@ -17,7 +17,7 @@ def io_func(logfile_path, result_file_path):
 
 def pure_func(file_line):
     line_parts = file_line.split()
-    return line_parts[0] if "304" in line_parts else None
+    return line_parts[0] if line_parts[8] == "304" else None
 
 
 def test_myfunc_positive():
