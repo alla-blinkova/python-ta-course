@@ -5,9 +5,11 @@ def get_continued_fraction(inp_fraction: str) -> str:
     result = []
     if denominator < 0:
         raise ValueError("Wrong input string format")
-    while denominator != 0:
+    while True:
         integer_part = numerator // denominator
         numerator = numerator % denominator
-        numerator, denominator = denominator, numerator
         result.append(integer_part)
+        if numerator == 0:
+            break
+        numerator, denominator = denominator, numerator
     return " ".join(str(i) for i in result)

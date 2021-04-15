@@ -19,7 +19,9 @@ def test_positive(test_fraction, result):
 
 
 def test_zero_division():
-    assert get_continued_fraction("1/0") == ""
+    with pytest.raises(ZeroDivisionError) as err:
+        _ = get_continued_fraction("1/0")
+    assert "integer division or modulo by zero" in str(err.value)
 
 
 @pytest.mark.parametrize("test_fraction", ["9/-4", "123.4", "", "abc", "a/b"])
