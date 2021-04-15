@@ -5,14 +5,19 @@
 # Set pytest as default runner https://stackoverflow.com/questions/6397063/how-do-i-configure-pycharm-to-run-py-test-tests
 # hit Ctrl+Shift+F10 or RMB on the file to run tests
 
+
 def io_func(logfile_path, result_file_path):
-    # filter logfile_path, writes into the result_file_path
-    pass
+    with open(logfile_path, mode="r") as file_input, \
+         open(result_file_path, mode="w") as file_output:
+        for line in file_input:
+            ip = pure_func(line)
+            if ip is not None:
+                file_output.write(f"{ip}\n")
 
 
 def pure_func(file_line):
-    # some logic that filter lines and doesn't depends on global state
-    pass
+    line_parts = file_line.split()
+    return line_parts[0] if line_parts[8] == "304" else None
 
 
 def test_myfunc_positive():
@@ -22,5 +27,6 @@ def test_myfunc_positive():
 
 
 def test_myfunc_negative():
-    # put some logic here that checks that line without 304 code is not goes into filter return
-    pass
+    line = '218.30.103.62 - - [17/May/2015:11:05:17 +0000] "GET /projects/xdotool/xdotool.xhtml \
+    HTTP/1.1" 200 - "-" "Sogou web spider/4.0(+http://www.sogou.com/docs/help/webmasters.htm#07)"'
+    assert pure_func(line) is None

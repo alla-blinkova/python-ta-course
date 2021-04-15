@@ -15,24 +15,24 @@ def build_request(method, base_url):
             resp = requests.request(url=url, method=method, params=params)
             kwargs.update(dict(resp=resp))
             return func(*args, **kwargs)
+
         return _build_request
+
     return my_decorator
 
 
 @build_request(method="GET", base_url="https://v2.jokeapi.dev/joke")
 def get_joke(**kwargs):
-    return # fix me
+    return kwargs.get("resp")
 
 
 @build_request(method="GET", base_url="http://www.boredapi.com/api")
-def get_bored(): # fix me
-    kwargs.get("whatever") # fix me
+def get_bored(**kwargs):
+    return kwargs.get("resp")
 
 
-resp = get_joke(uri="/any")
-print(resp.status_code)
-print(resp.text)
+resp = get_joke(uri="/Spooky", params="blacklistFlags=racist,sexist&amount=10")
+print(resp.json().get("amount"))
 
-resp = get_bored(uri="/activity")
-print(resp.status_code)
-print(resp.text)
+resp = get_bored(uri="/activity", params="key=5977626")
+print(resp.json().get("activity"))
