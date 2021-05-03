@@ -19,9 +19,29 @@ Some examples of what can be done:
 
 Also, add more tests to the test_dict.py to check response content.
 """
-
+import logging
+from collections import defaultdict
 from typing import Dict, List
+
+import requests
 
 
 def create_country_make_dict(url: str) -> Dict[str, List[str]]:
-    ...
+    country_manufacturers = defaultdict(list)
+    for response in get_pages(url):
+        for manufacturer in response["Results"]:
+            country = manufacturer["Country"]
+            if country:
+                country_manufacturers[country].append(manufacturer["Mfr_Name"])
+    return country_manufacturers
+
+
+def get_pages(url):
+    page = 1
+    while True:
+        response = requests.get(f"{url}&page={page}").json()
+        if not response["Count"]:
+            break
+        yield response
+        logging.info(f"Done with page {page}")
+        page += 1
