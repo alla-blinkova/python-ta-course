@@ -15,8 +15,8 @@ class KeyValueStorage:
 
     @staticmethod
     def convert_value(value):
-        value_new = value.strip()
+        value_strip = value.strip()
         try:
-            return int(value_new)
+            return int(value_strip)
         except ValueError:
-            return value_new
+            return value_strip
