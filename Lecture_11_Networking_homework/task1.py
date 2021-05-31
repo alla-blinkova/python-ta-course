@@ -13,4 +13,5 @@ def get_sites(url) -> set[str]:
         search_result = re.search("^(.*//)?([A-Za-z0-9.]+)([/:])", link)
         if search_result:
             domain_names.add(search_result.group(2))
-    return domain_names
+    return sorted(domain_names)
+
