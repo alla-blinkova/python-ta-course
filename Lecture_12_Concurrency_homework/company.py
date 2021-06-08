@@ -1,6 +1,3 @@
-from datetime import datetime, timedelta
-
-
 class Company:
     __slots__ = ["name", "price", "code", "p_e", "year_growth", "income"]
 

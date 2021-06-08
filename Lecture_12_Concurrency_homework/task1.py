@@ -49,14 +49,20 @@ async def get_company(session, tr, rate):
         response = await resp.text()
         soup_company = BeautifulSoup(response, features="html.parser")
         name = soup_company.select_one("span.price-section__label").text.strip()
-        code = (
-            format_number(soup_company.select_one(".price-section .price-section__category span").text)
+        code = format_number(
+            soup_company.select_one(".price-section .price-section__category span").text
         )
         tree = html.fromstring(response)
         try:
-            p_e = float(format_number(tree.xpath("//div[text()='P/E Ratio']/..")[0].text))
-            low = float(format_number(tree.xpath("//div[text()='52 Week Low']/..")[0].text))
-            high = float(format_number(tree.xpath("//div[text()='52 Week High']/..")[0].text))
+            p_e = float(
+                format_number(tree.xpath("//div[text()='P/E Ratio']/..")[0].text)
+            )
+            low = float(
+                format_number(tree.xpath("//div[text()='52 Week Low']/..")[0].text)
+            )
+            high = float(
+                format_number(tree.xpath("//div[text()='52 Week High']/..")[0].text)
+            )
         except IndexError:
             p_e = 0
             income = 0
@@ -74,7 +80,9 @@ async def get_companies(pages, exchange_rate):
         async with aiohttp.ClientSession() as session:
             tasks = []
             for line in table_lines:
-                tasks.append(asyncio.ensure_future(get_company(session, line, exchange_rate)))
+                tasks.append(
+                    asyncio.ensure_future(get_company(session, line, exchange_rate))
+                )
             companies_response = await asyncio.gather(*tasks)
             for company in companies_response:
                 companies.append(company)
@@ -86,7 +94,11 @@ def write_top_to_json(file_name, companies, field_name, get_field, is_reverse):
     with open(file_name, mode="w") as file_output:
         companies_json = []
         for company in top_companies:
-            company_dict = {"code": company.code, "name": company.name, field_name: get_field(company)}
+            company_dict = {
+                "code": company.code,
+                "name": company.name,
+                field_name: get_field(company),
+            }
             companies_json.append(company_dict)
         json.dump(companies_json, file_output)
 
@@ -99,4 +111,6 @@ companies = ioloop.run_until_complete(get_companies(companies_pages, exchange_ra
 write_top_to_json("max_cost.json", companies, "price", lambda x: x.price, True)
 write_top_to_json("min_pe.json", companies, "p/e", lambda x: x.p_e, False)
 write_top_to_json("max_growth.json", companies, "growth", lambda x: x.year_growth, True)
-write_top_to_json("max_income.json", companies, "potential income", lambda x: x.income, True)
+write_top_to_json(
+    "max_income.json", companies, "potential income", lambda x: x.income, True
+)
