@@ -10,7 +10,7 @@ def get_sites(url) -> set[str]:
     links = [link.attrs["href"] for link in soup.findAll("a")]
     domain_names = set()
     for link in links:
-        search_result = re.search("^(.*//)?([A-Za-z0-9.]+)([/:])", link)
+        search_result = re.search("^(.*//)?([A-Za-z0-9]+[A-Za-z0-9.]+)([/:])?", link)
         if search_result:
             domain_names.add(search_result.group(2))
     return sorted(domain_names)
